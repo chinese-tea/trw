@@ -31,7 +31,7 @@ class TaskClass{
 			}
 			
 			if($this->configArr['tb_order_status']){
-				sleep(mt_rand(1,3));
+				sleep(mt_rand(0,2));
 				
 				$res = $this->getList('order', 'tb'); //淘宝购买单
 				$taskList = array_slice($res->list, 0, 3);	
@@ -46,7 +46,7 @@ class TaskClass{
 			}
 			
 			if($this->configArr['jd_order_status']){
-				sleep(mt_rand(1,3));
+				sleep(mt_rand(0,2));
 				
 				$res = $this->getList('order', 'jd'); //京东购买单
 				$taskList = array_slice($res->list, 0, 3);	
@@ -60,8 +60,14 @@ class TaskClass{
 				}
 			}
 			
-			$t = mt_rand(3,6)/100; //1~2分钟随机抢单	
-			sleep($t*60);//定时
+			if($this->configArr['tb_order_status'] || $this->configArr['jd_order_status']){
+				sleep(mt_rand(0,2));
+			} else {
+				$t = mt_rand(3,6)/100; //1~2分钟随机抢单
+				sleep($t*60);//定时
+			}
+				
+			
 		}
 	}
 	
@@ -84,7 +90,7 @@ class TaskClass{
 
 	//选出订单
 	function selectOrder($taskList, $momeylimit=0){
-		$shop_name = array('精品刺绣馆','远航汽车导航直销店','全国企业彩铃定制中心','涵生珠宝','倍乐熊旗舰店','一诺能量水晶','情简时尚女装');
+		$shop_name = array('精品刺绣馆','远航汽车导航直销店','全国企业彩铃定制中心','涵生珠宝','倍乐熊旗舰店','一诺能量水晶','情简时尚女装','美之缘家居护理体验馆');
 		$task = null;
 		foreach($taskList as $v){
 			//not_match意思是单子还没被抢完，然后在选出金额最大的那单
