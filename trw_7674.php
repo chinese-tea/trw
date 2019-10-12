@@ -72,7 +72,7 @@ function getList($type, $shop_type){
 
 //选出订单
 function selectOrder($taskList, $momeylimit=0){
-	$shop_name = array('精品刺绣馆','远航汽车导航直销店','全国企业彩铃定制');
+	$shop_name = array('精品刺绣馆','远航汽车导航直销店','全国企业彩铃定制中心','涵生珠宝','倍乐熊旗舰店','一诺能量水晶','情简时尚女装');
 	$task = null;
 	foreach($taskList as $v){
 		//not_match意思是单子还没被抢完，然后在选出金额最大的那单
