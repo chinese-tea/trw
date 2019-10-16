@@ -37,7 +37,7 @@ class TaskClass{
 				
 				$res = $this->getList('order', 'tb'); //淘宝购买单
 				$taskList = array_slice($res->list, 0, 3);	
-				$task = $this->selectOrder($taskList, 8.0);	
+				$task = $this->selectOrder($taskList, 7.5);	
 				if($task != null){ //如果接到了任务，打印任务信息，不再继续循环
 					$r = $this->grabTask($task->id, $task->not_match);
 					if($r->code == '000'){
@@ -92,11 +92,11 @@ class TaskClass{
 
 	//选出订单
 	function selectOrder($taskList, $momeylimit=0){
-		$shop_name = array('精品刺绣馆','远航汽车导航直销店','全国企业彩铃定制中心','涵生珠宝','倍乐熊旗舰店','一诺能量水晶','情简时尚女装','美之缘家居护理体验馆','上汽零部件自营店','evafang时尚尖货');
+		$shop_name = array('精品刺绣馆','远航汽车导航直销店','全国企业彩铃定制中心','涵生珠宝','倍乐熊旗舰店','一诺能量水晶','情简时尚女装','美之缘家居护理体验馆','上汽零部件自营店','evafang时尚尖货','艺博陶瓷家居馆','赫泰旗舰店');
 		$task = null;
 		foreach($taskList as $v){
 			//not_match意思是单子还没被抢完，然后在选出金额最大的那单
-			if($v->not_match == 0 && (!in_array($v->name, $shop_name)) && ((float)$v->money >= $momeylimit) && ($task == null || (float)$v->money > (float)$task->money)){
+			if(  $v->not_match == 0 && (!in_array($v->name, $shop_name)) && ($this->taskMoney($v) >= $momeylimit) && ($task == null || $this->taskMoney($v) > $this->taskMoney($task) ) ){
 				$task = $v;  
 			}
 		}
@@ -114,6 +114,13 @@ class TaskClass{
 		);
 		
 		return $this->decode($this->post($url, $fields));
+	}
+	
+	function taskMoney($task){
+		if(isset($task->fee)){
+			return (float)$task->money + (float)$task->fee;
+		}
+		return (float)$task->money;
 	}
 
 	function prompt($name,$task){
