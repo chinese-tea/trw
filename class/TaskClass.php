@@ -24,7 +24,7 @@ class TaskClass{
 				$taskList = array_slice($res->list, 0, 3);	
 				$task = $this->selectOrder($taskList);	
 				if($task != null){ //如果接到了任务，打印任务信息，不再继续循环
-					$r = $this->grabTask($task->id, $task->not_match);
+					$r = $this->grabTask($task->id, $task->not_match, 'tasks');
 					if($r->code == '000'){
 						$this->prompt('淘宝浏览单',$task);
 						break;
@@ -37,9 +37,9 @@ class TaskClass{
 				
 				$res = $this->getList('order', 'tb'); //淘宝购买单
 				$taskList = array_slice($res->list, 0, 3);	
-				$task = $this->selectOrder($taskList, 7.5);	
+				$task = $this->selectOrder($taskList, 10);	
 				if($task != null){ //如果接到了任务，打印任务信息，不再继续循环
-					$r = $this->grabTask($task->id, $task->not_match);
+					$r = $this->grabTask($task->id, $task->not_match, 'order');
 					if($r->code == '000'){
 						$this->prompt('淘宝购买单',$task);
 						break;
@@ -54,7 +54,7 @@ class TaskClass{
 				$taskList = array_slice($res->list, 0, 3);	
 				$task = $this->selectOrder($taskList);	
 				if($task != null){ //如果接到了任务，打印任务信息，不再继续循环
-					$r = $this->grabTask($task->id, $task->not_match);
+					$r = $this->grabTask($task->id, $task->not_match, 'order');
 					if($r->code == '000'){
 						$this->prompt('京东购买单',$task);
 						break;
@@ -79,7 +79,7 @@ class TaskClass{
 	 * shop_type: tb淘宝,jd京东
 	 **/
 	function getList($type, $shop_type){
-		$url = 'http://api-wx.firstblog.cn/case/lists1?type=tasks&page=1&shop_type=tb&consumer_id='.$this->configArr['user_id'];
+		$url = 'http://api-wx.firstblog.cn/case/lists1?type='.$type.'&page=1&shop_type=tb&consumer_id='.$this->configArr['user_id'];
 		
 		$fields = array(
 			'type' => $type,
@@ -104,10 +104,10 @@ class TaskClass{
 	}
 
 
-	function grabTask($id, $not_match){
+	function grabTask($id, $not_match, $type){
 		$url = 'http://api-wx.firstblog.cn/case/getcase';
 		$fields = array(
-			'type' => 'tasks',
+			'type' => $type,
 			'id' => $id,
 			'not_match' => $not_match,
 			'consumer_id' => $this->configArr['user_id']
