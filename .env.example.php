@@ -18,22 +18,25 @@ $ENV_USER = array(
 			'tb_tasks_status' => true,
 			'tb_order_status' => true,
 			'jd_order_status' => true,
+			'minmoney' => 14
 		),
 	'15277041135' => array(
 			'user_name' => '15277041135',
 			'user_id' => 25508,
 			'token' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0aW1lIjoxNTcwNjI1MDUzLCJ1c2VyIjoiMzM4ODMifQ.IdIQOGBnXSX1lwR_oTlji2NHp-Mf3jt2uUEgwBQB4Io',
 			'tb_tasks_status' => true,
-			'tb_order_status' => false,
+			'tb_order_status' => true,
 			'jd_order_status' => false,
+			'minmoney' => 14
 		),
 	'13367717674' => array(
 			'user_name' => '13367717674',
 			'user_id' => 25471,
 			'token' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0aW1lIjoxNTcwNzExNzE0LCJ1c2VyIjoiMzM5OTUifQ.JyRvdShExnb3H06XvznQSPrSgccl9vY4p1SHezrIDuc',
 			'tb_tasks_status' => true,
-			'tb_order_status' => false,
+			'tb_order_status' => true,
 			'jd_order_status' => false,
+			'minmoney' => 12
 		),
 
 );

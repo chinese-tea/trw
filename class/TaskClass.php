@@ -37,7 +37,7 @@ class TaskClass{
 				
 				$res = $this->getList('order', 'tb'); //淘宝购买单
 				$taskList = array_slice($res->list, 0, 3);	
-				$task = $this->selectOrder($taskList, 10);	
+				$task = $this->selectOrder($taskList, $this->configArr['minmoney']);	
 				if($task != null){ //如果接到了任务，打印任务信息，不再继续循环
 					$r = $this->grabTask($task->id, $task->not_match, 'order');
 					if($r->code == '000'){
