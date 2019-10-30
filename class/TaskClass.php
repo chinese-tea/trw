@@ -24,7 +24,7 @@ class TaskClass{
 				$taskList = array_slice($res->list, 0, 3);	
 				$task = $this->selectOrder($taskList);	
 				if($task != null){ //如果接到了任务，打印任务信息，不再继续循环
-					$r = $this->grabTask($task->id, $task->not_match, 'tasks');
+					$r = $this->grabTask($task->id, $task->not_match, 'tasks', 'tb');
 					if($r->code == '000'){
 						$this->prompt('淘宝浏览单',$task);
 						break;
@@ -39,7 +39,7 @@ class TaskClass{
 				$taskList = array_slice($res->list, 0, 3);	
 				$task = $this->selectOrder($taskList, $this->configArr['minmoney']);	
 				if($task != null){ //如果接到了任务，打印任务信息，不再继续循环
-					$r = $this->grabTask($task->id, $task->not_match, 'order');
+					$r = $this->grabTask($task->id, $task->not_match, 'order', 'tb');
 					if($r->code == '000'){
 						$this->prompt('淘宝购买单',$task);
 						break;
@@ -54,7 +54,7 @@ class TaskClass{
 				$taskList = array_slice($res->list, 0, 3);	
 				$task = $this->selectOrder($taskList);	
 				if($task != null){ //如果接到了任务，打印任务信息，不再继续循环
-					$r = $this->grabTask($task->id, $task->not_match, 'order');
+					$r = $this->grabTask($task->id, $task->not_match, 'order', 'jd');
 					if($r->code == '000'){
 						$this->prompt('京东购买单',$task);
 						break;
@@ -73,26 +73,39 @@ class TaskClass{
 		}
 	}
 	
+	function getUserId($shop_type){
+		if($shop_type == 'jd'){
+			$user_id = $this->configArr['jd_user_id'];
+		} else {
+			$user_id = $this->configArr['user_id'];
+		}
+		return $user_id;
+	}
+	
 	
 	/**
 	 * type: tasks浏览单,order购买单
 	 * shop_type: tb淘宝,jd京东
 	 **/
 	function getList($type, $shop_type){
-		$url = 'http://api-wx.firstblog.cn/case/lists1?type='.$type.'&page=1&shop_type=tb&consumer_id='.$this->configArr['user_id'];
+		
+		$user_id = $this->getUserId($shop_type);
+		
+		$url = 'http://api-wx.firstblog.cn/case/lists1?type='.$type.'&page=1&shop_type=tb&consumer_id='.$user_id;
 		
 		$fields = array(
 			'type' => $type,
 			'page' => '1',
 			'shop_type' => $shop_type,
-			'consumer_id' => $this->configArr['user_id']
+			'consumer_id' => $user_id
 		);
 		return $this->decode($this->post($url, $fields));
 	}
 
 	//选出订单
 	function selectOrder($taskList, $momeylimit=0){
-		$shop_name = array('精品刺绣馆','远航汽车导航直销店','全国企业彩铃定制中心','涵生珠宝','倍乐熊旗舰店','一诺能量水晶','情简时尚女装','美之缘家居护理体验馆','上汽零部件自营店','evafang时尚尖货','艺博陶瓷家居馆','赫泰旗舰店');
+		//'精品刺绣馆','远航汽车导航直销店','全国企业彩铃定制中心','涵生珠宝','倍乐熊旗舰店','一诺能量水晶','情简时尚女装','美之缘家居护理体验馆','上汽零部件自营店','evafang时尚尖货','艺博陶瓷家居馆','赫泰旗舰店'
+		$shop_name = array('佳地素人女装高端定制','合创睦家美妆拼购专营店');
 		$task = null;
 		foreach($taskList as $v){
 			//not_match意思是单子还没被抢完，然后在选出金额最大的那单
@@ -104,13 +117,15 @@ class TaskClass{
 	}
 
 
-	function grabTask($id, $not_match, $type){
+	function grabTask($id, $not_match, $type, $shop_type){
+		$user_id = $this->getUserId($shop_type);
+		
 		$url = 'http://api-wx.firstblog.cn/case/getcase';
 		$fields = array(
 			'type' => $type,
 			'id' => $id,
 			'not_match' => $not_match,
-			'consumer_id' => $this->configArr['user_id']
+			'consumer_id' => $user_id
 		);
 		
 		return $this->decode($this->post($url, $fields));
@@ -124,7 +139,7 @@ class TaskClass{
 	}
 
 	function prompt($name,$task){
-		echo $this->configArr['user_name'].'接到任务'.$name.' 佣金：'.$task->money.'   任务id：'.$task->id.'  店铺名：'.$task->name;
+		echo $this->configArr['user_name'].'接到任务'.$name."\n\r 佣金：".$task->money.'   任务id：'.$task->id.'  店铺名：'.$task->name;
 		exec($this->app->env['prompt']['type'][$this->app->env['prompt']['type_id']]);
 	}
 
