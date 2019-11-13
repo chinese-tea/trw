@@ -52,7 +52,7 @@ class TaskClass{
 				
 				$res = $this->getList('order', 'jd'); //京东购买单
 				$taskList = array_slice($res->list, 0, 3);	
-				$task = $this->selectOrder($taskList);	
+				$task = $this->selectOrder($taskList, $this->configArr['jd_minmoney']);	
 				if($task != null){ //如果接到了任务，打印任务信息，不再继续循环
 					$r = $this->grabTask($task->id, $task->not_match, 'order', 'jd');
 					if($r->code == '000'){
@@ -67,7 +67,7 @@ class TaskClass{
 				
 				$res = $this->getList('order', 'pdd'); //拼多多购买单
 				$taskList = array_slice($res->list, 0, 3);	
-				$task = $this->selectOrder($taskList);	
+				$task = $this->selectOrder($taskList, $this->configArr['pdd_minmoney']);	
 				if($task != null){ //如果接到了任务，打印任务信息，不再继续循环
 					$r = $this->grabTask($task->id, $task->not_match, 'order', 'pdd');
 					if($r->code == '000'){
@@ -122,7 +122,7 @@ class TaskClass{
 	//选出订单
 	function selectOrder($taskList, $momeylimit=0){
 		//'精品刺绣馆','远航汽车导航直销店','全国企业彩铃定制中心','涵生珠宝','倍乐熊旗舰店','一诺能量水晶','情简时尚女装','美之缘家居护理体验馆','上汽零部件自营店','evafang时尚尖货','艺博陶瓷家居馆','赫泰旗舰店'
-		$shop_name = array('佳地素人女装高端定制','合创睦家美妆拼购专营店','浅小浅袋鼠国好物','hourseat时坐家居生活官方旗舰店');
+		$shop_name = array('佳地素人女装高端定制','hourseat时坐家居生活官方旗舰店','豪客牛牛');
 		$task = null;
 		foreach($taskList as $v){
 			//not_match意思是单子还没被抢完，然后在选出金额最大的那单

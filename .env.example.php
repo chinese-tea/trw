@@ -21,7 +21,9 @@ $ENV_USER = array(
 			'tb_order_status' => false,
 			'jd_order_status' => true,
 			'pdd_order_status' => false,
-			'minmoney' => 14
+			'minmoney' => 10,
+			'jd_minmoney' => 5,
+			'pdd_minmoney' => 5
 		),
 	'15277041135' => array(
 			'user_name' => '15277041135',
@@ -33,7 +35,9 @@ $ENV_USER = array(
 			'tb_order_status' => false,
 			'jd_order_status' => false,
 			'pdd_order_status' => false,
-			'minmoney' => 14
+			'minmoney' => 10,
+			'jd_minmoney' => 5,
+			'pdd_minmoney' => 5
 		),
 	'13367717674' => array(
 			'user_name' => '13367717674',
@@ -45,7 +49,9 @@ $ENV_USER = array(
 			'tb_order_status' => false,
 			'jd_order_status' => false,
 			'pdd_order_status' => true,
-			'minmoney' => 0
+			'minmoney' => 10,
+			'jd_minmoney' => 5,
+			'pdd_minmoney' => 5
 		),
 
 );
