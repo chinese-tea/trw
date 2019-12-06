@@ -6,6 +6,7 @@ class TaskClass{
 	protected $app;
 	protected $ch;
 	protected $configArr;
+	private $prompt = '';
 	
 	function __construct($app, $configArr){
 		$this->app = $app;
@@ -15,11 +16,17 @@ class TaskClass{
 	}
 	
 	function run(){
+		$get_tb_tasks = true;
+		$get_tb_order = true;
+		$get_jd_order = true;
+		$get_pdd_order = true;
+		
 		while(1){
 	
 			echo date('Y-m-d H:i:s')."\n";
+			echo $this->prompt;
 			
-			if($this->configArr['tb_tasks_status']){
+			if($get_tb_tasks && $this->configArr['tb_tasks_status']){
 				$res = $this->getList('tasks', 'tb'); //淘宝浏览单
 				$taskList = array_slice($res->list, 0, 3);	
 				$task = $this->selectOrder($taskList);	
@@ -27,12 +34,13 @@ class TaskClass{
 					$r = $this->grabTask($task->id, $task->not_match, 'tasks', 'tb');
 					if($r->code == '000'){
 						$this->prompt('淘宝浏览单',$task);
-						break;
+						$get_tb_tasks = false;
+						//break;
 					}		
 				}
 			}
 			
-			if($this->configArr['tb_order_status']){
+			if($get_tb_order && $this->configArr['tb_order_status']){
 				sleep(mt_rand(0,2));
 				
 				$res = $this->getList('order', 'tb'); //淘宝购买单
@@ -42,12 +50,13 @@ class TaskClass{
 					$r = $this->grabTask($task->id, $task->not_match, 'order', 'tb');
 					if($r->code == '000'){
 						$this->prompt('淘宝购买单',$task);
-						break;
+						$get_tb_order = false;
+						//break;
 					}		
 				}
 			}
 			
-			if($this->configArr['jd_order_status']){
+			if($get_jd_order && $this->configArr['jd_order_status']){
 				sleep(mt_rand(0,2));
 				
 				$res = $this->getList('order', 'jd'); //京东购买单
@@ -57,12 +66,13 @@ class TaskClass{
 					$r = $this->grabTask($task->id, $task->not_match, 'order', 'jd');
 					if($r->code == '000'){
 						$this->prompt('京东购买单',$task);
-						break;
+						$get_jd_order = false;
+						//break;
 					}		
 				}
 			}
 			
-			if($this->configArr['pdd_order_status']){
+			if($get_pdd_order && $this->configArr['pdd_order_status']){
 				sleep(mt_rand(0,2));
 				
 				$res = $this->getList('order', 'pdd'); //拼多多购买单
@@ -72,7 +82,8 @@ class TaskClass{
 					$r = $this->grabTask($task->id, $task->not_match, 'order', 'pdd');
 					if($r->code == '000'){
 						$this->prompt('拼多多购买单',$task);
-						break;
+						$get_pdd_order = false;
+						//break;
 					}		
 				}
 			}
@@ -122,7 +133,7 @@ class TaskClass{
 	//选出订单
 	function selectOrder($taskList, $momeylimit=0){
 		//'精品刺绣馆','远航汽车导航直销店','全国企业彩铃定制中心','涵生珠宝','倍乐熊旗舰店','一诺能量水晶','情简时尚女装','美之缘家居护理体验馆','上汽零部件自营店','evafang时尚尖货','艺博陶瓷家居馆','赫泰旗舰店'
-		$shop_name = array('佳地素人女装高端定制','hourseat时坐家居生活官方旗舰店','豪客牛牛');
+		$shop_name = array('腰定YOU','鹤山市华翼户外雨具制品厂');
 		$task = null;
 		foreach($taskList as $v){
 			//not_match意思是单子还没被抢完，然后在选出金额最大的那单
@@ -156,7 +167,7 @@ class TaskClass{
 	}
 
 	function prompt($name,$task){
-		echo $this->configArr['user_name'].'接到任务'.$name."\n\r 佣金：".$task->money.'   任务id：'.$task->id.'  店铺名：'.$task->name;
+		$this->prompt = $this->configArr['user_name'].'接到任务'.$name."\n\r 佣金：".$task->money.'   任务id：'.$task->id.'  店铺名：'.$task->name."\n\r";
 		exec($this->app->env['prompt']['type'][$this->app->env['prompt']['type_id']]);
 	}
 

@@ -35,7 +35,7 @@ $ENV_USER = array(
 			'tb_order_status' => false,
 			'jd_order_status' => false,
 			'pdd_order_status' => false,
-			'minmoney' => 10,
+			'minmoney' => 6,
 			'jd_minmoney' => 5,
 			'pdd_minmoney' => 5
 		),
@@ -49,7 +49,7 @@ $ENV_USER = array(
 			'tb_order_status' => false,
 			'jd_order_status' => false,
 			'pdd_order_status' => true,
-			'minmoney' => 10,
+			'minmoney' => 6,
 			'jd_minmoney' => 5,
 			'pdd_minmoney' => 5
 		),
